@@ -9,7 +9,7 @@
 	export let onEventSelect: (eventId: number) => void;
 </script>
 
-<ScrollArea class="h-screen">
+<ScrollArea class="h-screen-scroll">
 	<div class="flex flex-col gap-2 p-4 pt-0">
 		{#if events.length <= 0}
 			<p>No Events</p>

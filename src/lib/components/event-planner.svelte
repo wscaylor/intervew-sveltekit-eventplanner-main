@@ -8,10 +8,8 @@
 	import EventList from "./event-list.svelte";
 	import Nav from "./nav.svelte";
 	import { cn } from "$lib/utils.js";
-	import { Input } from "$lib/ui/input/index.js";
 	import * as Resizable from "$lib/ui/resizable/index.js";
 	import { Separator } from "$lib/ui/select/index.js";
-	import * as Tabs from "$lib/ui/tabs/index.js";
 	import { creating, editing, selected } from './store';
 	import { onNavigate, pushState, replaceState } from '$app/navigation';
 
@@ -140,7 +138,7 @@
 	<Resizable.PaneGroup
 		direction="horizontal"
 		{onLayoutChange}
-		class="h-full max-h-[800px] items-stretch"
+		class="h-full max-h-pane items-stretch"
 	>
 		<Resizable.Pane
 			defaultSize={defaultLayout[0]}
@@ -187,7 +185,7 @@
 			</Tabs.Root>
 		</Resizable.Pane>
 		<Resizable.Handle withHandle />
-		<Resizable.Pane defaultSize={defaultLayout[2]}>
+		<Resizable.Pane defaultSize={defaultLayout[2]} minSize={20}>
 			<EventDisplay event={selectedEvent} {onCreateEventClick} {onEditEventClick} {onCancelEventCreate}
 				{onCancelEventEdit} />
 		</Resizable.Pane>

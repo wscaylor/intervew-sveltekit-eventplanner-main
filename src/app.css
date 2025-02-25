@@ -66,6 +66,20 @@
 		text-rendering: optimizeLegibility;
 	}
 
+	.app-content > div:first-of-type {
+		margin: 5vh 5vw;
+		border: solid 2px hsl(var(--border) / var(--tw-border-opacity, 1));
+	}
+	
+	.max-h-pane {
+		max-height: calc(90vh - 4px);
+		min-height: calc(90vh - 4px);
+	}
+
+	.h-screen-scroll {
+		height: calc(90vh - 65px);
+	}
+
 	/* Mobile tap highlight */
 	/* https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-tap-highlight-color */
 	html {
