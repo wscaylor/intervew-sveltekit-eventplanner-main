@@ -161,28 +161,21 @@
 			<Nav {isCollapsed} routes={primaryRoutes} />
 		</Resizable.Pane>
 		<Resizable.Handle withHandle />
-		<Resizable.Pane defaultSize={defaultLayout[1]} minSize={30} style="overflow-y: scroll;">
-			<Tabs.Root value="all">
-				<div class="flex items-center px-4 py-2">
-					<h1 class="text-xl font-bold">Events</h1>
-					<div class="h-9"></div>
-				</div>
-				<Separator />
-				<div
-					class="bg-background/95 supports-[backdrop-filter]:bg-background/60 p-1 backdrop-blur"
-				>
-				</div>
-				{#await events}
-					<p>Loading events...</p>
-				{:then events}
-					<Tabs.Content value="all" class="m-0">
-						<EventList {events} {onEventSelect} />
-					</Tabs.Content>
-					<Tabs.Content value="unread" class="m-0">
-						<EventList events={events.filter((item) => item)} {onEventSelect} />
-					</Tabs.Content>
-				{/await}
-			</Tabs.Root>
+		<Resizable.Pane defaultSize={defaultLayout[1]} minSize={30}>
+			<div class="flex items-center px-4 py-2">
+				<h1 class="text-xl font-bold">Events</h1>
+				<div class="h-9"></div>
+			</div>
+			<Separator />
+			<div
+				class="bg-background/95 supports-[backdrop-filter]:bg-background/60 p-1 backdrop-blur"
+			>
+			</div>
+			{#await events}
+				<p>Loading events...</p>
+			{:then events}
+				<EventList {events} {onEventSelect} />
+			{/await}
 		</Resizable.Pane>
 		<Resizable.Handle withHandle />
 		<Resizable.Pane defaultSize={defaultLayout[2]} minSize={20}>
