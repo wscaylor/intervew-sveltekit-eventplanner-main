@@ -32,16 +32,6 @@
 		if (eventId) {
 			handleEventSelection(eventId);
 		}
-
-		if (typeof window !== "undefined") {
-			window.addEventListener('popstate', handlePopstate);
-		}
-	});
-
-	onDestroy(() => {
-		if (typeof window !== "undefined") {
-			window.removeEventListener('popstate', handlePopstate);
-		}
 	});
 
 	onNavigate((x) => {
@@ -140,6 +130,8 @@
 		return event;
 	}
 </script>
+
+<svelte:window on:popstate={(event) => {handlePopstate(event)}} />
 
 <div class="hidden md:block">
 	<Resizable.PaneGroup direction="horizontal" {onLayoutChange} class="h-full max-h-pane items-stretch">
