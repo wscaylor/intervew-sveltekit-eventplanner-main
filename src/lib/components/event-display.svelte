@@ -17,6 +17,7 @@
 	export let onEditEventClick: () => void;
 	export let onCancelEventCreate: () => void;
 	export let onCancelEventEdit: () => void;
+	export let onEventUpdated: (id: number) => void;
 
 	const fullFormatter = new DateFormatter("en-US", {
 		dateStyle: "medium",
@@ -26,49 +27,153 @@
 	const submitCreateEvent: SubmitFunction = ({ formData, cancel }) => {
 		$creating = false;
         $creatingEvent = true;
-        const { date } = Object.fromEntries(formData);
 
+        const { title, description, date } = Object.fromEntries(formData);
         const inputDate = new Date(date.toString());
         const now = new Date();
 
-        if (isNaN(inputDate.getTime()) || inputDate < now) {
+		if (!title) {
+			cancel();
+			$creating = true;
+            $creatingEvent = false;
+			let dateElement = document.getElementById('title');
+			if (dateElement && !dateElement.classList.contains('has-error')) {
+				dateElement.classList.add('has-error');
+			}
+			toast.error("Event cannot be created", {
+				description: "title field is required"
+			});
+		} else if (!description) {
+			cancel();
+			$creating = true;
+            $creatingEvent = false;
+			let dateElement = document.getElementById('description');
+			if (dateElement && !dateElement.classList.contains('has-error')) {
+				dateElement.classList.add('has-error');
+			}
+			toast.error("Event cannot be created", {
+				description: "description field is required"
+			});
+		} else if (isNaN(inputDate.getTime())) {
             cancel();
 			$creating = true;
             $creatingEvent = false;
+			let dateElement = document.getElementById('date');
+			if (dateElement && !dateElement.classList.contains('has-error')) {
+				dateElement.classList.add('has-error');
+			}
 			toast.error("Event cannot be created", {
-				description: "Event Date cannot be in the past"
+				description: "date field is required"
 			});
-        }
+        } else if (inputDate < now) {
+			cancel();
+			$creating = true;
+            $creatingEvent = false;
+			let dateElement = document.getElementById('date');
+			if (dateElement && !dateElement.classList.contains('has-error')) {
+				dateElement.classList.add('has-error');
+			}
+			toast.error("Event cannot be created", {
+				description: "event date cannot be in the past"
+			});
+		}
 
         return async ({ result, update }) => {
-            await update().then(() => {
+			if (result.type === 'error') {
+				$creating = true;
 				$creatingEvent = false;
-			});
-        };
+				toast.error("Event could not be created", {
+					description: "an error occurred while creating the event"
+				});
+			} else if (result.type === 'failure') {
+				$creating = true;
+				$creatingEvent = false;
+				toast.error("Event could not be created", {
+					description: result.data?.description
+				});
+			} else {
+				await update().then(() => {
+					$creatingEvent = false;
+					toast.success(`Event "${title}" created`);
+				});
+			};
+		};
     }
 
 	const submitUpdateEvent: SubmitFunction = ({ formData, cancel }) => {
 		$editing = false;
         $savingEvent = true;
-        const { date } = Object.fromEntries(formData);
-
+		const { title, description, date, id } = Object.fromEntries(formData);
+		const eventId = id ? parseInt(id.toString(), 10) : undefined;
         const inputDate = new Date(date.toString());
         const now = new Date();
 
-        if (isNaN(inputDate.getTime()) || inputDate < now) {
+		if (!title) {
+			cancel();
+			$editing = true;
+            $savingEvent = false;
+			let dateElement = document.getElementById('title');
+			if (dateElement && !dateElement.classList.contains('has-error')) {
+				dateElement.classList.add('has-error');
+			}
+			toast.error("Event cannot be updated", {
+				description: "title field is required"
+			});
+		} else if (!description) {
+			cancel();
+			$editing = true;
+            $savingEvent = false;
+			let dateElement = document.getElementById('description');
+			if (dateElement && !dateElement.classList.contains('has-error')) {
+				dateElement.classList.add('has-error');
+			}
+			toast.error("Event cannot be updated", {
+				description: "description field is required"
+			});
+		} else if (isNaN(inputDate.getTime())) {
             cancel();
 			$editing = true;
             $savingEvent = false;
-			toast.error("Event cannot be saved", {
-				description: "Event Date cannot be in the past"
+			let dateElement = document.getElementById('date');
+			if (dateElement && !dateElement.classList.contains('has-error')) {
+				dateElement.classList.add('has-error');
+			}
+			toast.error("Event cannot be updated", {
+				description: "date field is required"
 			});
-        }
+        } else if (inputDate < now) {
+			cancel();
+			$editing = true;
+            $savingEvent = false;
+			let dateElement = document.getElementById('date');
+			if (dateElement && !dateElement.classList.contains('has-error')) {
+				dateElement.classList.add('has-error');
+			}
+			toast.error("Event cannot be updated", {
+				description: "event date cannot be in the past"
+			});
+		}
 
         return async ({ result, update }) => {
-            await update().then(() => {
+			if (result.type === 'error' || !eventId) {
+				$editing = true;
 				$savingEvent = false;
-				$selected = null;
-			});
+				toast.error("Event could not be updated", {
+					description: "an error occurred while updating the event"
+				});
+			} else if (result.type === 'failure') {
+				$editing = true;
+				$savingEvent = false;
+				toast.error("Event could not be updated", {
+					description: result.data?.description
+				});
+			} else {
+				await update().then(() => {
+					onEventUpdated(eventId);
+					$savingEvent = false;
+					toast.success(`Event "${title}" updated`);
+				});
+			}
         };
 	}
 
@@ -78,12 +183,26 @@
 		$deleting = true;
 		$selected = null;
 
-        return async ({ update }) => {
-            await update().then(() => {
+        return async ({ result, update }) => {
+			if (result.type === 'error') {
 				$deleting = false;
-			});
+				toast.error("Event could not be deleted", {
+					description: "an error occurred while deleting the event"
+				});
+			} else {
+				await update().then(() => {
+					$deleting = false;
+				});
+			}
         };
     }
+
+	function clearValidationErrors(elementId: string) {
+		let element = document.getElementById(elementId);
+		if (element && element.classList.contains('has-error')) {
+			element.classList.remove('has-error');
+		}
+	}
 </script>
 
 <div class="flex h-full flex-col">
@@ -190,14 +309,17 @@
 		<form method="POST" action="?/create" use:enhance={submitCreateEvent}>
 			<div class="p-4">
 				<label for="title">Title</label>
-				<Input type="text" id="title" name="title" required />
+				<Input type="text" id="title" name="title"
+					on:change={() => clearValidationErrors('title')} />
 			</div>
 			<div class="p-4">
-				<Textarea id="description" name="description" placeholder="Description" required />
+				<Textarea id="description" name="description" placeholder="Description"
+					on:change={() => clearValidationErrors('description')} />
 			</div>
 			<div class="p-4">
 				<label for="date">Date</label>
-				<Input type="datetime-local" id="date" name="date" required />
+				<Input type="datetime-local" id="date" name="date"
+					on:change={() => clearValidationErrors('date')} />
 			</div>
 			<Separator class="mt-auto" />
 			<div class="p-4">
@@ -221,14 +343,17 @@
 				<input type="text" id="id" name="id" value="{event?.id}" hidden>
 				<div class="p-4">
 					<label for="title">Title</label>
-					<Input type="text" id="title" name="title" value="{event?.title}"  required />
+					<Input type="text" id="title" name="title" value="{event?.title}"
+						on:change={() => clearValidationErrors('title')} />
 				</div>
 				<div class="p-4">
-					<Textarea id="description" name="description" placeholder="Description" value={event?.description} required />
+					<Textarea id="description" name="description" placeholder="Description" value={event?.description}
+						on:change={() => clearValidationErrors('description')} />
 				</div>
 				<div class="p-4">
 					<label for="date">Date</label>
-					<Input type="datetime-local" id="date" name="date" value="{event?.date}" required />
+					<Input type="datetime-local" id="date" name="date" value="{event?.date}"
+						on:change={() => clearValidationErrors('date')} />
 				</div>
 				<Separator class="mt-auto" />
 				<div class="p-4">

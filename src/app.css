@@ -100,6 +100,11 @@
 		padding-left: 1rem;
 	}
 
+	input.has-error,
+	textarea.has-error {
+		border-color: red;
+	}
+
 	/* Mobile tap highlight */
 	/* https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-tap-highlight-color */
 	html {

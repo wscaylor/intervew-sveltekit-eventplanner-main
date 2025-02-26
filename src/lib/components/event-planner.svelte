@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy, afterUpdate } from 'svelte';
 	import { primaryRoutes } from "$lib/config.js";
 	import type { Appearance } from "$lib/data.js";
 	import type { Event } from "$lib/server/remote-events";
@@ -109,6 +109,10 @@
 		$creating = false;
 	}
 
+	async function onEventUpdated(id: number) {
+		handleEventSelection(id);
+	}
+
 	async function handleEventSelection(eventId: number | null) {
 		selectedEventId = eventId;
 		$selected = eventId;
@@ -136,26 +140,10 @@
 </script>
 
 <div class="hidden md:block">
-	<Resizable.PaneGroup
-		direction="horizontal"
-		{onLayoutChange}
-		class="h-full max-h-pane items-stretch"
-	>
-		<Resizable.Pane
-			defaultSize={defaultLayout[0]}
-			collapsedSize={navCollapsedSize}
-			collapsible
-			minSize={15}
-			maxSize={20}
-			{onCollapse}
-			{onExpand}
-		>
-			<div
-				class={cn(
-					"flex h-[52px] items-center justify-center",
-					isCollapsed ? "h-[52px]" : "px-2"
-				)}
-			>
+	<Resizable.PaneGroup direction="horizontal" {onLayoutChange} class="h-full max-h-pane items-stretch">
+		<Resizable.Pane defaultSize={defaultLayout[0]} collapsedSize={navCollapsedSize} collapsible
+			minSize={15} maxSize={20} {onCollapse} {onExpand}>
+			<div class={cn("flex h-[52px] items-center justify-center", isCollapsed ? "h-[52px]" : "px-2")}>
 				<AppearanceSwitcher {isCollapsed} {appearances} />
 			</div>
 			<Separator />
@@ -185,7 +173,7 @@
 		<Resizable.Handle withHandle />
 		<Resizable.Pane defaultSize={defaultLayout[2]} minSize={20}>
 			<EventDisplay event={selectedEvent} {onCreateEventClick} {onEditEventClick} {onCancelEventCreate}
-				{onCancelEventEdit} />
+				{onCancelEventEdit} {onEventUpdated} />
 		</Resizable.Pane>
 	</Resizable.PaneGroup>
 </div>

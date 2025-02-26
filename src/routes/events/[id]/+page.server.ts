@@ -1,6 +1,6 @@
 import { fetchAllEvents, createEvent, updateEventById, deleteEventById } from "$lib/server/remote-events";
 import type { PageServerLoad, Actions } from "./$types";
-import { error, redirect } from "@sveltejs/kit";
+import { error, redirect, fail } from "@sveltejs/kit";
 
 let eventId: number;
 
@@ -31,12 +31,23 @@ export const actions: Actions = {
 		const title = formdata.get('title')?.toString();
 		const description = formdata.get('description')?.toString();
 		const date = formdata.get('date')?.toString();
-		if (!title || !date) {
-			error(400, 'Title and Date are required');
+		let validationErrorDescription: string | undefined;
+		if (!title) {
+			validationErrorDescription = 'title field is required';
+		} else if (!description) {
+			validationErrorDescription = 'description field is required';
+		} else if (!date) {
+			validationErrorDescription = 'date field is required';
+		} else {
+			await createEvent({title, description, date});
 		}
-		await createEvent({title, description, date}).then((newEvent) => {
-			redirect(303, `/events/${newEvent.id}`);
-		});
+		
+		if (validationErrorDescription) {
+			return fail(422, {
+				description: validationErrorDescription,
+				error: 'validation error'
+			});
+		}
 	},
 	edit: async ({request}) => {
 		const formdata = await request.formData();
@@ -46,12 +57,23 @@ export const actions: Actions = {
 			const title = formdata.get('title')?.toString();
 			const description = formdata.get('description')?.toString();
 			const date = formdata.get('date')?.toString();
-			if (!title || !date) {
-				error(400, 'Title and Date are required');
+			let validationErrorDescription: string | undefined;
+			if (!title) {
+				validationErrorDescription = 'title field is required';
+			} else if (!description) {
+				validationErrorDescription = 'description field is required';
+			} else if (!date) {
+				validationErrorDescription = 'date field is required';
+			} else {
+				await updateEventById(eventId, {title, description, date});
 			}
-			await updateEventById(eventId, {title, description, date}).then(() => {
-				redirect(303, `/events`);
-			});
+
+			if (validationErrorDescription) {
+				return fail(422, {
+					description: validationErrorDescription,
+					error: 'validation error'
+				});
+			}
 		}
 	},
 	delete: async ({request}) => {
