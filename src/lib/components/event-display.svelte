@@ -138,7 +138,7 @@
 	{#if $savingEvent}
 		<LoadingSpinner>
 			<span slot="loading-text">
-				saving event details...
+				saving event...
 			</span>
 		</LoadingSpinner>
 	{:else if $creatingEvent}
@@ -157,7 +157,7 @@
 		{#await event}
 			<LoadingSpinner>
 				<span slot="loading-text">
-					loading event details...
+					loading event...
 				</span>
 			</LoadingSpinner>
 		{:then event}
@@ -211,7 +211,11 @@
 		</form>
 	{:else if !$creating && $editing && event}
 		{#await event}
-			<p>Loading event details...</p>
+			<LoadingSpinner>
+				<span slot="loading-text">
+					loading event...
+				</span>
+			</LoadingSpinner>
 		{:then event}
 			<form method="POST" action="?/edit" use:enhance={submitUpdateEvent}>
 				<input type="text" id="id" name="id" value="{event?.id}" hidden>

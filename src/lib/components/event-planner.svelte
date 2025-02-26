@@ -175,7 +175,7 @@
 			{#await events}
 				<LoadingSpinner>
 					<span slot="loading-text">
-						Loading Events...
+						loading events...
 					</span>
 				</LoadingSpinner>
 			{:then events}
