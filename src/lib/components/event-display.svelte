@@ -7,7 +7,7 @@
 	import { Textarea } from "$lib/ui/textarea/index";
 	import { Input } from "$lib/ui/input/index";
 	import * as Tooltip from "$lib/ui/tooltip/index";
-	import { creating, deleting, editing, creatingEvent, savingEvent, selected } from "$lib/components/store";
+	import { creating, deletingEvent, editing, creatingEvent, updatingEvent, selectedEventId } from "$lib/components/store";
 	import { enhance } from "$app/forms";
 	import { type SubmitFunction } from "@sveltejs/kit";
 	import { toast } from "svelte-sonner";
@@ -102,7 +102,7 @@
 
 	const submitUpdateEvent: SubmitFunction = ({ formData, cancel }) => {
 		$editing = false;
-        $savingEvent = true;
+        $updatingEvent = true;
 		const { title, description, date, id } = Object.fromEntries(formData);
 		const eventId = id ? parseInt(id.toString(), 10) : undefined;
         const inputDate = new Date(date.toString());
@@ -111,7 +111,7 @@
 		if (!title) {
 			cancel();
 			$editing = true;
-            $savingEvent = false;
+            $updatingEvent = false;
 			let dateElement = document.getElementById('title');
 			if (dateElement && !dateElement.classList.contains('has-error')) {
 				dateElement.classList.add('has-error');
@@ -122,7 +122,7 @@
 		} else if (!description) {
 			cancel();
 			$editing = true;
-            $savingEvent = false;
+            $updatingEvent = false;
 			let dateElement = document.getElementById('description');
 			if (dateElement && !dateElement.classList.contains('has-error')) {
 				dateElement.classList.add('has-error');
@@ -133,7 +133,7 @@
 		} else if (isNaN(inputDate.getTime())) {
             cancel();
 			$editing = true;
-            $savingEvent = false;
+            $updatingEvent = false;
 			let dateElement = document.getElementById('date');
 			if (dateElement && !dateElement.classList.contains('has-error')) {
 				dateElement.classList.add('has-error');
@@ -144,7 +144,7 @@
         } else if (inputDate < now) {
 			cancel();
 			$editing = true;
-            $savingEvent = false;
+            $updatingEvent = false;
 			let dateElement = document.getElementById('date');
 			if (dateElement && !dateElement.classList.contains('has-error')) {
 				dateElement.classList.add('has-error');
@@ -157,20 +157,20 @@
         return async ({ result, update }) => {
 			if (result.type === 'error' || !eventId) {
 				$editing = true;
-				$savingEvent = false;
+				$updatingEvent = false;
 				toast.error("Event could not be updated", {
 					description: "an error occurred while updating the event"
 				});
 			} else if (result.type === 'failure') {
 				$editing = true;
-				$savingEvent = false;
+				$updatingEvent = false;
 				toast.error("Event could not be updated", {
 					description: result.data?.description
 				});
 			} else {
 				await update().then(() => {
 					onEventUpdated(eventId);
-					$savingEvent = false;
+					$updatingEvent = false;
 					toast.success(`Event "${title}" updated`);
 				});
 			}
@@ -180,18 +180,18 @@
 	const submitDeleteEvent: SubmitFunction = () => {
 		$editing = false;
 		$creating = false;
-		$deleting = true;
-		$selected = null;
+		$deletingEvent = true;
+		$selectedEventId = null;
 
         return async ({ result, update }) => {
 			if (result.type === 'error') {
-				$deleting = false;
+				$deletingEvent = false;
 				toast.error("Event could not be deleted", {
 					description: "an error occurred while deleting the event"
 				});
 			} else {
 				await update().then(() => {
-					$deleting = false;
+					$deletingEvent = false;
 				});
 			}
         };
@@ -221,7 +221,7 @@
 				<Tooltip.Content>Edit</Tooltip.Content>
 			</Tooltip.Root>
 			<form method="POST" action="?/delete" use:enhance={submitDeleteEvent}>
-				<input type="text" id="id" name="id" value="{$selected}" hidden>
+				<input type="text" id="id" name="id" value="{$selectedEventId}" hidden>
 				<Tooltip.Root openDelay={0} group>
 					<Tooltip.Trigger
 						id="move_to_trash_tooltip"
@@ -254,7 +254,7 @@
 		</div>
 	</div>
 	<Separator />
-	{#if $savingEvent}
+	{#if $updatingEvent}
 		<LoadingSpinner>
 			<span slot="loading-text">
 				saving event...
@@ -266,13 +266,13 @@
 				creating event...
 			</span>
 		</LoadingSpinner>
-	{:else if $deleting}
+	{:else if $deletingEvent}
 		<LoadingSpinner>
 			<span slot="loading-text">
 				deleting event...
 			</span>
 		</LoadingSpinner>
-	{:else if event && !$creating && !$editing && $selected}
+	{:else if event && !$creating && !$editing && $selectedEventId}
 		{#await event}
 			<LoadingSpinner>
 				<span slot="loading-text">

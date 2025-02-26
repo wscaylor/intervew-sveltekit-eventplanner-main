@@ -10,13 +10,13 @@
 	import { cn } from "$lib/utils.js";
 	import * as Resizable from "$lib/ui/resizable/index.js";
 	import { Separator } from "$lib/ui/select/index.js";
-	import { creating, editing, selected } from './store';
+	import { creating, editing, selectedEventId } from './store';
 	import { onNavigate, pushState, replaceState } from '$app/navigation';
 	import LoadingSpinner from '$lib/ui/spinner/loading-spinner.svelte';
 
 	export let appearances: Appearance[];
 	export let events: Promise<Event[]>;
-	export let selectedEventId: number | null = null;
+	export let eventId: number | null = null;
 	export let defaultLayout = [265, 440, 655];
 	export let defaultCollapsed = false;
 	export let navCollapsedSize: number;
@@ -29,8 +29,8 @@
 		$creating = false;
 		$editing = false;
 
-		if (selectedEventId) {
-			handleEventSelection(selectedEventId);
+		if (eventId) {
+			handleEventSelection(eventId);
 		}
 
 		if (typeof window !== "undefined") {
@@ -87,7 +87,7 @@
 		$creating = true;
 		$editing = false;
 		pushState('/events/create', {eventId: null});
-		$selected = null;
+		$selectedEventId = null;
 	}
 
 	async function onEditEventClick() {
@@ -99,8 +99,8 @@
 		$creating = false;
 		$editing = false;
 		replaceState('/events', {eventId: null})
-		$selected = null;
-		selectedEventId = null;
+		$selectedEventId = null;
+		eventId = null;
 		selectedEvent = null;
 	}
 
@@ -114,8 +114,8 @@
 	}
 
 	async function handleEventSelection(eventId: number | null) {
-		selectedEventId = eventId;
-		$selected = eventId;
+		eventId = eventId;
+		$selectedEventId = eventId;
 		try {
 			if (eventId) {
 				selectedEvent = fetchEventById(eventId);

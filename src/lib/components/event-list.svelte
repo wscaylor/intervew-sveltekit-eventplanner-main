@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { selected } from "$lib/components/store.js";
+	import { selectedEventId } from "$lib/components/store.js";
 	import type { Event } from "$lib/server/remote-events.js"
 	import { formatTimeAgo } from "./utils.js";
 	import { cn } from "$lib/utils.js";
@@ -18,7 +18,7 @@
 			<button
 				class={cn(
 					"hover:bg-accent flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all",
-					$selected === event.id && "bg-muted"
+					$selectedEventId === event.id && "bg-muted"
 				)}
 				on:click={() => onEventSelect(event.id)}
 			>
@@ -30,7 +30,7 @@
 						<div
 							class={cn(
 								"ml-auto text-xs",
-								$selected === event.id
+								$selectedEventId === event.id
 									? "text-foreground"
 									: "text-muted-foreground"
 							)}

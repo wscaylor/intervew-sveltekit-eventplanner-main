@@ -6,5 +6,5 @@
 	let {data}: {data: PageData} = $props();
 </script>
 
-<EventPlanner {appearances} events={data.events} selectedEventId={data.selected}
+<EventPlanner {appearances} events={data.events} eventId={data.selected}
 	defaultLayout={data.layout} defaultCollapsed={data.collapsed} navCollapsedSize={4} />
