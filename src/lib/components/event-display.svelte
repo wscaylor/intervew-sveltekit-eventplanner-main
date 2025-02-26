@@ -189,6 +189,7 @@
 		$creating = false;
 		$deletingEvent = true;
 		$selectedEventId = null;
+		event = null;
 
         return async ({ result, update }) => {
 			if (result.type === 'error') {
