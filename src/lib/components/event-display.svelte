@@ -1,15 +1,22 @@
 <script lang="ts">
-	import { DateFormatter, LoadingSpinner } from "$lib"
 	import type { Event } from "$lib/server/remote-events";
+	import type { SubmitFunction } from "@sveltejs/kit";
 	import * as Icons from "$lib/icons";
-	import { Button, buttonVariants } from "$lib/ui/button/index";
-	import { Separator } from "$lib/ui/separator/index";
-	import { Textarea } from "$lib/ui/textarea/index";
-	import { Input } from "$lib/ui/input/index";
-	import * as Tooltip from "$lib/ui/tooltip/index";
-	import { creating, deletingEvent, editing, creatingEvent, updatingEvent, selectedEventId } from "$lib/components/store";
+	import * as Tooltip from "$lib/ui/tooltip";
+	import {
+		creating,
+		deletingEvent,
+		editing,
+		creatingEvent,
+		updatingEvent,
+		selectedEventId
+	} from "$lib/components/store";
+	import { DateFormatter, LoadingSpinner } from "$lib"
+	import { Button, buttonVariants } from "$lib/ui/button";
+	import { Separator } from "$lib/ui/separator";
+	import { Textarea } from "$lib/ui/textarea";
+	import { Input } from "$lib/ui/input";
 	import { enhance } from "$app/forms";
-	import { type SubmitFunction } from "@sveltejs/kit";
 	import { toast } from "svelte-sonner";
 
 	export let event: Promise<Event | null> | null;

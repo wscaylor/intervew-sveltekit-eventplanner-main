@@ -1,6 +1,6 @@
 <script lang="ts">
-	import DragHandleDots2 from "svelte-radix/DragHandleDots2.svelte";
 	import * as ResizablePrimitive from "paneforge";
+	import DragHandleDots2 from "svelte-radix/DragHandleDots2.svelte";
 	import { cn } from "$lib/utils.js";
 
 	type $$Props = ResizablePrimitive.PaneResizerProps & {

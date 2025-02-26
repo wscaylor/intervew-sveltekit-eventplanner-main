@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { selectedEventId } from "$lib/components/store.js";
-	import type { Event } from "$lib/server/remote-events.js"
-	import { formatTimeAgo } from "./utils.js";
-	import { cn } from "$lib/utils.js";
-	import { ScrollArea } from "$lib/ui/scroll-area/index.js";
+	import type { Event } from "$lib/server/remote-events";
+	import { ScrollArea } from "$lib/ui/scroll-area";
+	import { selectedEventId } from "$lib/components/store";
+	import { cn } from "$lib/utils";
+	import { formatTimeAgo } from "./utils";
 
 	export let events: Event[];
 	export let onEventSelect: (eventId: number) => void;

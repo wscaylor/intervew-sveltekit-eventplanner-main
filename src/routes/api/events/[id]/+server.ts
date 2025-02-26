@@ -1,5 +1,5 @@
-import { fetchEventById } from "$lib/server/remote-events";
 import type { RequestHandler } from "@sveltejs/kit";
+import { fetchEventById } from "$lib/server/remote-events";
 
 export const GET: RequestHandler = async ({params}) => {
   const eventId = Number(params.id);

@@ -1,6 +1,17 @@
-import { fetchAllEvents, createEvent, updateEventById, deleteEventById } from "$lib/server/remote-events";
-import type { PageServerLoad, Actions } from "./$types";
-import { redirect, fail } from "@sveltejs/kit";
+import type {
+	PageServerLoad,
+	Actions
+} from "./$types";
+import {
+	fetchAllEvents,
+	createEvent,
+	updateEventById,
+	deleteEventById
+} from "$lib/server/remote-events";
+import {
+	redirect,
+	fail
+} from "@sveltejs/kit";
 
 let eventId: number;
 

@@ -1,6 +1,6 @@
 import type { ComponentType } from "svelte";
 import type { Icon } from "lucide-svelte";
-import * as Icons from "./icons.js";
+import * as Icons from "./icons";
 
 export type Appearance = {
 	label: string;

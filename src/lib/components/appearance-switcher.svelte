@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { Appearance } from "$lib/data.js";
-	import * as Select from "$lib/ui/select/index.js";
-	import { cn } from "$lib/utils.js";
+	import type { Appearance } from "$lib/data";
+	import * as Select from "$lib/ui/select/index";
+	import { cn } from "$lib/utils";
 	import { setMode } from "mode-watcher";
 	import { browser } from '$app/environment';
 	import { onMount } from "svelte";

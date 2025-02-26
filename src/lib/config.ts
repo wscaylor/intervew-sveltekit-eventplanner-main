@@ -1,5 +1,5 @@
 import type { Icon } from "lucide-svelte";
-import * as Icons from "./icons.js";
+import * as Icons from "./icons";
 import type { ComponentType } from "svelte";
 
 export type Route = {

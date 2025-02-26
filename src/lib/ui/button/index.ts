@@ -1,7 +1,7 @@
-import type { Button as ButtonPrimitive } from "bits-ui";
 import { type VariantProps, tv } from "tailwind-variants";
-import Root from "./button.svelte";
+import type { Button as ButtonPrimitive } from "bits-ui";
 import type { ClassNameValue } from "tailwind-merge";
+import Root from "./button.svelte";
 
 const buttonVariants = tv({
 	base: "focus-visible:ring-ring inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50",

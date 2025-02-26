@@ -1,6 +1,7 @@
 <script lang="ts">
-	import { Select as SelectPrimitive, Check } from "$lib";
-	import { cn } from "$lib/utils.js";
+	import { Select as SelectPrimitive } from "bits-ui";
+	import { Check } from "svelte-radix";
+	import { cn } from "$lib/utils";
 
 	type $$Props = SelectPrimitive.ItemProps;
 	type $$Events = Required<SelectPrimitive.ItemEvents>;

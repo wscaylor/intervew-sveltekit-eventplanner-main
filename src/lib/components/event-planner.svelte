@@ -1,18 +1,28 @@
 <script lang="ts">
-	import { onMount, onDestroy, afterUpdate } from 'svelte';
-	import { primaryRoutes } from "$lib/config.js";
-	import type { Appearance } from "$lib/data.js";
+	import type { Appearance } from "$lib/data";
 	import type { Event } from "$lib/server/remote-events";
-	import AppearanceSwitcher from "./appearance-switcher.svelte";
-	import EventDisplay from "./event-display.svelte";
-	import EventList from "./event-list.svelte";
-	import Nav from "./nav.svelte";
-	import { cn } from "$lib/utils.js";
 	import * as Resizable from "$lib/ui/resizable/index.js";
-	import { Separator } from "$lib/ui/select/index.js";
-	import { creating, editing, selectedEventId } from './store';
-	import { onNavigate, pushState, replaceState } from '$app/navigation';
-	import LoadingSpinner from '$lib/ui/spinner/loading-spinner.svelte';
+	import {
+		LoadingSpinner,
+		EventDisplay,
+		EventList,
+		AppearanceSwitcher,
+		Nav
+	} from "$lib";
+	import {
+		creating,
+		editing,
+		selectedEventId
+	} from "./store";
+	import {
+		onNavigate,
+		pushState,
+		replaceState
+	} from "$app/navigation";
+	import { Separator } from "$lib/ui/select";
+	import { onMount } from "svelte";
+	import { primaryRoutes } from "$lib/config";
+	import { cn } from "$lib/utils";
 
 	export let appearances: Appearance[];
 	export let events: Promise<Event[]>;
