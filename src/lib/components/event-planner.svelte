@@ -114,6 +114,8 @@
 	}
 
 	async function handleEventSelection(eventId: number | null) {
+		$creating = false;
+		$editing = false;
 		eventId = eventId;
 		$selectedEventId = eventId;
 		try {
