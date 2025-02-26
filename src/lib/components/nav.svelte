@@ -17,7 +17,7 @@
 				<Tooltip.Root openDelay={0}>
 					<Tooltip.Trigger asChild let:builder>
 						<Button
-							href=""
+							href={route.path}
 							builders={[builder]}
 							variant={route.variant}
 							size="icon"
@@ -42,7 +42,7 @@
 				</Tooltip.Root>
 			{:else}
 				<Button
-					href=""
+					href={route.path}
 					variant={route.variant}
 					size="sm"
 					class={cn("justify-start", {

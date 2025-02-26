@@ -7,6 +7,7 @@ export type Route = {
 	label: string;
 	icon: ComponentType<Icon>;
 	variant: "default" | "ghost";
+	path: string;
 };
 
 export const primaryRoutes: Route[] = [
@@ -15,5 +16,6 @@ export const primaryRoutes: Route[] = [
 		label: "",
 		icon: Icons.Calendar,
 		variant: "default",
+		path: "/events"
 	}
 ];
