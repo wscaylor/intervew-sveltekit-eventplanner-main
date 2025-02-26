@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { df, LoadingSpinner } from "$lib"
+	import { DateFormatter, LoadingSpinner } from "$lib"
 	import type { Event } from "$lib/server/remote-events";
 	import * as Icons from "$lib/icons";
 	import { Button, buttonVariants } from "$lib/ui/button/index";
@@ -18,7 +18,7 @@
 	export let onCancelEventCreate: () => void;
 	export let onCancelEventEdit: () => void;
 
-	const fullFormatter = new df.DateFormatter("en-US", {
+	const fullFormatter = new DateFormatter("en-US", {
 		dateStyle: "medium",
 		timeStyle: "medium",
 	});
