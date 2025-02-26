@@ -12,6 +12,7 @@
 	import { Separator } from "$lib/ui/select/index.js";
 	import { creating, editing, selected } from './store';
 	import { onNavigate, pushState, replaceState } from '$app/navigation';
+	import LoadingSpinner from '$lib/ui/spinner/loading-spinner.svelte';
 
 	export let appearances: Appearance[];
 	export let events: Promise<Event[]>;
@@ -172,7 +173,11 @@
 			>
 			</div>
 			{#await events}
-				<p>Loading events...</p>
+				<LoadingSpinner>
+					<span slot="loading-text">
+						Loading Events...
+					</span>
+				</LoadingSpinner>
 			{:then events}
 				<EventList {events} {onEventSelect} />
 			{/await}

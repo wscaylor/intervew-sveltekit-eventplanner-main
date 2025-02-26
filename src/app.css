@@ -80,6 +80,26 @@
 		height: calc(90vh - 65px);
 	}
 
+	.loading-spinner-wrapper {
+		display: flex;
+		margin-top: 1rem;
+		width: 100%;
+	}
+
+	.loading-spinner-content {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.loading-spinner-wrapper > div {
+		display: flex;
+	}
+
+	.loading-spinner-text {
+		align-self: center;
+		padding-left: 1rem;
+	}
+
 	/* Mobile tap highlight */
 	/* https://developer.mozilla.org/en-US/docs/Web/CSS/-webkit-tap-highlight-color */
 	html {

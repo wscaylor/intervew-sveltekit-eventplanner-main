@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { df } from "$lib"
+	import { df, LoadingSpinner } from "$lib"
 	import type { Event } from "$lib/server/remote-events";
 	import * as Icons from "$lib/icons";
 	import { Button, buttonVariants } from "$lib/ui/button/index";
@@ -136,14 +136,30 @@
 	</div>
 	<Separator />
 	{#if $savingEvent}
-		<p>Saving event details...</p>
+		<LoadingSpinner>
+			<span slot="loading-text">
+				saving event details...
+			</span>
+		</LoadingSpinner>
 	{:else if $creatingEvent}
-		<p>Creating event...</p>
+		<LoadingSpinner>
+			<span slot="loading-text">
+				creating event...
+			</span>
+		</LoadingSpinner>
 	{:else if $deleting}
-		<p>Deleting event...</p>
+		<LoadingSpinner>
+			<span slot="loading-text">
+				deleting event...
+			</span>
+		</LoadingSpinner>
 	{:else if event && !$creating && !$editing && $selected}
 		{#await event}
-			<p>Loading event details...</p>
+			<LoadingSpinner>
+				<span slot="loading-text">
+					loading event details...
+				</span>
+			</LoadingSpinner>
 		{:then event}
 			<div class="flex h-full flex-1 flex-col overflow-hidden">
 				{#if event}
